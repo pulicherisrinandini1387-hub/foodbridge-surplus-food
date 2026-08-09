@@ -1,0 +1,253 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@600;700;800&display=swap');
+@import 'leaflet/dist/leaflet.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand: #10b981;
+  --brand-dark: #059669;
+  --brand-light: #34d399;
+  --accent: #f97316;
+  --cream: #f7faf9;
+  --mint: #f0fdf9;
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: #f7faf9;
+  color: #0f172a;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: 'Sora', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* ===== Scrollbar ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f7f4;
+}
+::-webkit-scrollbar-thumb {
+  background: #bbf7d0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #86efac;
+}
+
+/* ===== Leaflet ===== */
+.leaflet-container {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  border-radius: 1rem;
+  z-index: 0;
+  background: #f0f7f4;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 10px 40px -10px rgba(4, 78, 59, 0.15);
+  border: 1px solid #e2e8f0;
+}
+.leaflet-popup-tip {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+}
+.leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+.leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+}
+.leaflet-control-attribution {
+  background: rgba(240, 247, 244, 0.9) !important;
+  color: #64748b !important;
+}
+.leaflet-control-attribution a {
+  color: #475569 !important;
+}
+.leaflet-bar a {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+.leaflet-bar a:hover {
+  background: #f1f5f9 !important;
+}
+
+/* ===== Glass effects ===== */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* ===== Gradient text ===== */
+.text-gradient {
+  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #34d399 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-warm {
+  background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ===== Glow effects ===== */
+.glow-brand {
+  box-shadow: 0 0 0 1px rgba(16, 185, 129, 0.15), 0 8px 32px -8px rgba(16, 185, 129, 0.2);
+}
+.glow-accent {
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.15), 0 8px 32px -8px rgba(249, 115, 22, 0.2);
+}
+
+/* ===== Animated gradient background ===== */
+.animated-gradient {
+  background: linear-gradient(-45deg, #f7faf9, #f0fdf9, #ecfdf5, #f0f7f4);
+  background-size: 400% 400%;
+  animation: gradient-shift 12s ease infinite;
+}
+
+/* ===== Mesh gradient blobs ===== */
+.mesh-bg {
+  position: relative;
+}
+.mesh-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(at 20% 30%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+    radial-gradient(at 80% 20%, rgba(249, 115, 22, 0.06) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(5, 150, 105, 0.07) 0px, transparent 50%);
+  pointer-events: none;
+}
+
+/* ===== Skeleton shimmer ===== */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #e8f3ef;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+/* ===== Utility ===== */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* ===== Card hover depth ===== */
+.card-3d {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-3d:hover {
+  transform: translateY(-4px);
+}
+
+/* ===== Scroll indicator ===== */
+.scroll-indicator {
+  width: 24px;
+  height: 40px;
+  border: 2px solid rgba(16, 185, 129, 0.3);
+  border-radius: 12px;
+  position: relative;
+}
+.scroll-indicator::after {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 8px;
+  background: #10b981;
+  border-radius: 2px;
+  animation: scroll-bounce 1.8s ease-in-out infinite;
+}
+@keyframes scroll-bounce {
+  0%, 100% { top: 6px; opacity: 1; }
+  50% { top: 20px; opacity: 0.3; }
+}
+
+/* ===== Network line animation ===== */
+@keyframes flow {
+  to { stroke-dashoffset: -100; }
+}
+.flow-line {
+  animation: flow 3s linear infinite;
+}
+
+/* ===== Premium gradient bg for dashboard ===== */
+.dashboard-bg {
+  background: linear-gradient(135deg, #f7faf9 0%, #f0fdf9 50%, #ecfdf5 100%);
+  position: relative;
+}
+.dashboard-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(at 15% 20%, rgba(16, 185, 129, 0.04) 0px, transparent 50%),
+    radial-gradient(at 85% 10%, rgba(249, 115, 22, 0.03) 0px, transparent 50%),
+    radial-gradient(at 50% 90%, rgba(5, 150, 105, 0.04) 0px, transparent 50%);
+  pointer-events: none;
+}
