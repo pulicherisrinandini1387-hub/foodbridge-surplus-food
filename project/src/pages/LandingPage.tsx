@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { ExpiryTimer } from '@/components/ui/ExpiryTimer';
+import { FoodRescueNetwork } from '@/components/FoodRescueNetwork';
 import { useApp } from '@/store/AppContext';
 import { testimonials } from '@/data/seed';
 
@@ -38,22 +39,6 @@ function AnimatedCounter({ value, suffix = '', decimals = 0 }: { value: number; 
       {suffix}
     </span>
   );
-}
-
-function useMouseParallax() {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      const cx = window.innerWidth / 2;
-      const cy = window.innerHeight / 2;
-      x.set((e.clientX - cx) / cx);
-      y.set((e.clientY - cy) / cy);
-    };
-    window.addEventListener('mousemove', handler);
-    return () => window.removeEventListener('mousemove', handler);
-  }, [x, y]);
-  return { x, y };
 }
 
 function ParticleField() {
@@ -117,162 +102,89 @@ function FloatingFoodElements() {
   );
 }
 
-function FloatingGlassCards() {
-  const { x, y } = useMouseParallax();
-  const xMov1 = useTransform(x, [-1, 1], [-15, 15]);
-  const yMov1 = useTransform(y, [-1, 1], [-10, 10]);
-  const xMov2 = useTransform(x, [-1, 1], [15, -15]);
-  const yMov2 = useTransform(y, [-1, 1], [10, -10]);
-  const xMov3 = useTransform(x, [-1, 1], [-8, 8]);
-  const yMov3 = useTransform(y, [-1, 1], [8, -8]);
-
-  const cards = [
-    { icon: Utensils, label: '165 Meals Rescued', tone: 'brand', x: xMov1, y: yMov1, pos: 'top-[10%] right-[5%]', delay: 1.0 },
-    { icon: Building2, label: '18 NGOs Nearby', tone: 'blue', x: xMov2, y: yMov2, pos: 'bottom-[15%] left-[3%]', delay: 1.3 },
-    { icon: MapPin, label: '2.4 km Away', tone: 'accent', x: xMov3, y: yMov3, pos: 'top-[50%] right-[0%]', delay: 1.6 },
-    { icon: Package, label: '94% Delivered', tone: 'warm', x: xMov1, y: yMov2, pos: 'bottom-[5%] right-[15%]', delay: 1.9 },
-  ];
-
-  const toneMap: Record<string, string> = {
-    brand: 'text-brand-600 bg-brand-50',
-    blue: 'text-blue-600 bg-blue-50',
-    accent: 'text-accent-600 bg-accent-50',
-    warm: 'text-warm-600 bg-warm-50',
-  };
-
-  return (
-    <>
-      {cards.map((card, i) => {
-        const Icon = card.icon;
-        return (
-          <motion.div
-            key={i}
-            style={{ x: card.x, y: card.y }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: card.delay, type: 'spring', damping: 20 }}
-            className={`absolute ${card.pos} z-20 hidden md:block`}
-          >
-            <div className="glass-card rounded-2xl shadow-float px-4 py-3 flex items-center gap-3 animate-float border border-white/60" style={{ animationDelay: `${i * 0.5}s` }}>
-              <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${toneMap[card.tone]}`}>
-                <Icon className="w-4 h-4" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-ink-800 leading-none">{card.label}</p>
-              </div>
-            </div>
-          </motion.div>
-        );
-      })}
-    </>
-  );
-}
-
-function NetworkLines() {
-  return (
-    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 1000 600" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10b981" stopOpacity="0.5" />
-          <stop offset="100%" stopColor="#10b981" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#f97316" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
-        </linearGradient>
-        <linearGradient id="lineGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-        </linearGradient>
-      </defs>
-      <motion.path d="M 150 200 Q 400 100 500 300" fill="none" stroke="url(#lineGrad1)" strokeWidth="2" strokeDasharray="8 8"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }} />
-      <motion.path d="M 500 300 Q 600 400 850 350" fill="none" stroke="url(#lineGrad2)" strokeWidth="2" strokeDasharray="8 8"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: 2, delay: 0.5, repeat: Infinity, repeatType: 'reverse' }} />
-      <motion.path d="M 850 350 Q 600 500 200 450" fill="none" stroke="url(#lineGrad3)" strokeWidth="2" strokeDasharray="8 8"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: 1 }}
-        transition={{ duration: 2, delay: 1, repeat: Infinity, repeatType: 'reverse' }} />
-    </svg>
-  );
-}
-
 function HeroSection() {
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 600], [0, 100]);
   const heroOpacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden pt-20 pb-12">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-24 pb-16 lg:pt-20">
       <div className="absolute inset-0 -z-10 animated-gradient" />
       <div className="absolute inset-0 -z-10 mesh-bg" />
       <ParticleField />
       <FloatingFoodElements />
-      <NetworkLines />
 
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-300/30 rounded-full blur-[120px] animate-pulse-glow -z-10" />
       <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent-300/20 rounded-full blur-[100px] animate-pulse-glow -z-10" style={{ animationDelay: '1.5s' }} />
 
       <motion.div style={{ y: heroY, opacity: heroOpacity }} className="max-w-7xl mx-auto px-4 lg:px-8 w-full">
-        <div className="max-w-3xl mx-auto text-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-8 items-center">
+          {/* Left — copy */}
+          <div className="text-center lg:text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-brand-700 text-sm font-semibold mb-6 border border-brand-200/50"
+            >
+              <Sparkles className="w-4 h-4" />
+              Real-time surplus food redistribution
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-ink-900 leading-[1.05] tracking-tight text-balance"
+            >
+              Turn Surplus Food Into{' '}
+              <span className="text-gradient">Someone's Next Meal.</span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-6 text-lg lg:text-xl text-ink-600 leading-relaxed max-w-xl mx-auto lg:mx-0 text-pretty"
+            >
+              FoodBridge connects surplus food with verified NGOs and volunteers in real time — turning waste into measurable social impact.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-8 flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
+            >
+              <Link to="/signup">
+                <Button size="lg" className="group w-full sm:w-auto">
+                  Donate Surplus Food
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link to="/login">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                  <MapPin className="w-4 h-4" />
+                  Find Food Nearby
+                </Button>
+              </Link>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
+              className="mt-10 flex items-center justify-center lg:justify-start gap-6 text-sm text-ink-500 font-medium"
+            >
+              <div className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-brand-600" /> Verified NGOs</div>
+              <div className="flex items-center gap-2"><Users className="w-4 h-4 text-brand-600" /> 312+ Donors</div>
+              <div className="flex items-center gap-2"><Leaf className="w-4 h-4 text-brand-600" /> Eco Impact</div>
+            </motion.div>
+          </div>
+
+          {/* Right — signature 3D network */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-brand-700 text-sm font-semibold mb-6 border border-brand-200/50"
+            initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative"
           >
-            <Sparkles className="w-4 h-4" />
-            Real-time surplus food redistribution
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-ink-900 leading-[1.05] tracking-tight"
-          >
-            Turn Surplus Food Into{' '}
-            <span className="text-gradient">Someone's Next Meal.</span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-6 text-lg lg:text-xl text-ink-600 leading-relaxed max-w-2xl mx-auto"
-          >
-            FoodBridge connects surplus food with verified NGOs and volunteers in real time — turning waste into measurable social impact.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-8 flex flex-col sm:flex-row gap-3 justify-center"
-          >
-            <Link to="/signup">
-              <Button size="lg" className="group w-full sm:w-auto">
-                Donate Surplus Food
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </Link>
-            <Link to="/login">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto">
-                <MapPin className="w-4 h-4" />
-                Find Food Nearby
-              </Button>
-            </Link>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
-            className="mt-10 flex items-center justify-center gap-6 text-sm text-ink-500 font-medium"
-          >
-            <div className="flex items-center gap-2"><ShieldCheck className="w-4 h-4 text-brand-600" /> Verified NGOs</div>
-            <div className="flex items-center gap-2"><Users className="w-4 h-4 text-brand-600" /> 312+ Donors</div>
-            <div className="flex items-center gap-2"><Leaf className="w-4 h-4 text-brand-600" /> Eco Impact</div>
+            <FoodRescueNetwork />
           </motion.div>
         </div>
       </motion.div>
 
-      <FloatingGlassCards />
-
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex flex-col items-center gap-2"
       >
         <div className="scroll-indicator" />
         <span className="text-xs text-ink-500 font-medium">Scroll to explore</span>
@@ -449,8 +361,17 @@ function LiveNetworkSection() {
 
         <div className="grid lg:grid-cols-5 gap-6">
           <Card className="lg:col-span-3 p-6 relative overflow-hidden min-h-[400px]">
-            <h3 className="font-bold text-ink-900 mb-4">Live City Map</h3>
-            <StylizedCityMap />
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-bold text-ink-900">Live Rescue Flow</h3>
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-700">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-500 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-500" />
+                </span>
+                Live
+              </span>
+            </div>
+            <RescueFlow />
           </Card>
 
           <div className="lg:col-span-2 grid grid-cols-2 gap-4">
@@ -479,59 +400,85 @@ function LiveNetworkSection() {
   );
 }
 
-function StylizedCityMap() {
-  const nodes = [
-    { x: 15, y: 25, type: 'restaurant', label: 'Restaurant' },
-    { x: 45, y: 15, type: 'restaurant', label: 'Restaurant' },
-    { x: 75, y: 30, type: 'restaurant', label: 'Cafe' },
-    { x: 25, y: 55, type: 'ngo', label: 'NGO' },
-    { x: 60, y: 60, type: 'ngo', label: 'Shelter' },
-    { x: 85, y: 70, type: 'ngo', label: 'Community Kitchen' },
-    { x: 40, y: 80, type: 'volunteer', label: 'Volunteer' },
-    { x: 70, y: 85, type: 'community', label: 'Community' },
-  ];
+const flowStages = [
+  { icon: Utensils, label: 'Donor', meta: 'Surplus posted', color: '#059669', soft: 'bg-brand-50', text: 'text-brand-600' },
+  { icon: Sparkles, label: 'Smart Match', meta: 'AI routing', color: '#10b981', soft: 'bg-brand-50', text: 'text-brand-600' },
+  { icon: Building2, label: 'NGO', meta: 'Claims food', color: '#2563eb', soft: 'bg-blue-50', text: 'text-blue-600' },
+  { icon: Bike, label: 'Volunteer', meta: 'Picks up', color: '#ea580c', soft: 'bg-accent-50', text: 'text-accent-600' },
+  { icon: Users, label: 'Community', meta: 'Meals served', color: '#ca8a04', soft: 'bg-warm-50', text: 'text-warm-600' },
+];
 
-  const connections = [[0, 3], [1, 3], [1, 4], [2, 4], [2, 5], [3, 6], [4, 6], [4, 7], [5, 7]];
-
-  const nodeConfig: Record<string, { color: string; emoji: string; ring: string }> = {
-    restaurant: { color: '#10b981', emoji: '🍱', ring: 'ring-brand-500/30' },
-    ngo: { color: '#3b82f6', emoji: '🏠', ring: 'ring-blue-500/30' },
-    volunteer: { color: '#f97316', emoji: '🚴', ring: 'ring-accent-500/30' },
-    community: { color: '#facc15', emoji: '👥', ring: 'ring-warm-400/30' },
-  };
-
+function FlowConnector({ delay }: { delay: number }) {
   return (
-    <div className="relative w-full h-[340px] rounded-xl bg-surface-3 overflow-hidden border border-ink-100">
-      <div className="absolute inset-0 opacity-[0.04]" style={{
-        backgroundImage: 'linear-gradient(to right, rgba(15,23,42,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.5) 1px, transparent 1px)',
-        backgroundSize: '40px 40px',
-      }} />
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-        {connections.map(([from, to], i) => (
-          <motion.line key={i} x1={nodes[from].x} y1={nodes[from].y} x2={nodes[to].x} y2={nodes[to].y}
-            stroke={nodeConfig[nodes[from].type].color} strokeWidth="0.3" strokeDasharray="2 1"
-            initial={{ opacity: 0 }} whileInView={{ opacity: 0.5 }} viewport={{ once: true }}
-            transition={{ delay: i * 0.1 }} className="flow-line" />
-        ))}
-      </svg>
-      {nodes.map((node, i) => {
-        const cfg = nodeConfig[node.type];
-        return (
-          <motion.div key={i}
-            initial={{ opacity: 0, scale: 0 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
-            transition={{ delay: i * 0.08, type: 'spring' }} className="absolute"
-            style={{ left: `${node.x}%`, top: `${node.y}%`, transform: 'translate(-50%, -50%)' }}>
-            <div className="relative">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm bg-white ring-2 ${cfg.ring} shadow-lg`}
-                style={{ boxShadow: `0 0 16px ${cfg.color}40` }}>
-                {cfg.emoji}
-              </div>
-              <motion.div className="absolute inset-0 rounded-full" style={{ border: `1px solid ${cfg.color}` }}
-                animate={{ scale: [1, 2], opacity: [0.6, 0] }} transition={{ duration: 2, delay: i * 0.3, repeat: Infinity }} />
+    <div className="relative flex items-center justify-center lg:flex-1">
+      {/* vertical on mobile, horizontal on desktop */}
+      <div className="h-7 w-0.5 lg:h-0.5 lg:w-full overflow-hidden rounded-full bg-brand-100">
+        <motion.div
+          className="h-full w-full bg-gradient-to-b lg:bg-gradient-to-r from-brand-400 to-brand-600"
+          initial={{ scaleY: 0, scaleX: 0 }}
+          whileInView={{ scaleY: 1, scaleX: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay, duration: 0.4 }}
+          style={{ transformOrigin: 'top left' }}
+        />
+      </div>
+      <motion.span
+        className="absolute h-2.5 w-2.5 rounded-full bg-brand-500"
+        style={{ boxShadow: '0 0 10px rgba(16,185,129,0.9)' }}
+        animate={{ scale: [0.7, 1.15, 0.7], opacity: [0.4, 1, 0.4] }}
+        transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', delay }}
+      />
+    </div>
+  );
+}
+
+function RescueFlow() {
+  return (
+    <div className="relative rounded-2xl border border-ink-100 bg-gradient-to-br from-surface-2 to-surface-1 p-5 lg:p-6 overflow-hidden">
+      <div
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(15,23,42,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(15,23,42,0.5) 1px, transparent 1px)',
+          backgroundSize: '36px 36px',
+        }}
+      />
+      <div className="relative flex flex-col items-stretch lg:flex-row lg:items-center">
+        {flowStages.map((stage, i) => {
+          const Icon = stage.icon;
+          return (
+            <div key={stage.label} className="contents">
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.14, type: 'spring', damping: 16 }}
+                className="flex items-center gap-3 lg:flex-col lg:gap-2 lg:text-center"
+              >
+                <div className="relative shrink-0">
+                  <motion.span
+                    className="absolute inset-0 rounded-2xl"
+                    style={{ backgroundColor: `${stage.color}33` }}
+                    animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                    transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.4 }}
+                  />
+                  <div
+                    className={`relative flex h-14 w-14 items-center justify-center rounded-2xl ${stage.soft} ${stage.text} border border-white shadow-float`}
+                    style={{ boxShadow: `0 8px 24px -8px ${stage.color}66` }}
+                  >
+                    <Icon className="h-6 w-6" />
+                  </div>
+                </div>
+                <div className="lg:mt-1">
+                  <p className="text-sm font-bold text-ink-900 leading-none">{stage.label}</p>
+                  <p className="mt-1 text-xs text-ink-500 leading-none">{stage.meta}</p>
+                </div>
+              </motion.div>
+              {i < flowStages.length - 1 && <FlowConnector delay={0.2 + i * 0.14} />}
             </div>
-          </motion.div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }

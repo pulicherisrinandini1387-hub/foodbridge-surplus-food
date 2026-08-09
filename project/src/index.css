@@ -236,6 +236,14 @@ h1, h2, h3, h4, h5 {
   animation: flow 3s linear infinite;
 }
 
+/* ===== Food rescue network flow ===== */
+@keyframes fr-flow {
+  to { stroke-dashoffset: -180; }
+}
+.fr-flow {
+  animation: fr-flow 2.4s linear infinite;
+}
+
 /* ===== Premium gradient bg for dashboard ===== */
 .dashboard-bg {
   background: linear-gradient(135deg, #f7faf9 0%, #f0fdf9 50%, #ecfdf5 100%);
